@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Financia Global Services Dashboard (Demo)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Military International Banking Services Dashboard (Full)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background: #f7f9fb; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
@@ -13,62 +13,64 @@
       display: flex; justify-content: space-between; align-items: center;
       background: #003366; color: white; padding: 12px 25px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 50;
     }
     .top-bar .left { display: flex; align-items: center; gap: 12px; }
-    .top-bar .flag { width: 28px; height: 18px; border: 1px solid #ccc; }
+    .top-bar .flag { width: 28px; height: 18px; border: 1px solid #ccc; object-fit:cover; }
     .top-bar select {
       padding: 6px; border: none; border-radius: 4px;
       font-size: 14px; outline: none;
     }
-    .top-bar .right a {
-      color: white; margin-left: 20px; text-decoration: none;
-      font-weight: 500; transition: color 0.2s;
+    .top-bar .right { display:flex; align-items:center; gap:14px; }
+    .top-bar .right a, .top-bar .right button {
+      color: white; margin-left: 0; text-decoration: none;
+      font-weight: 500; transition: color 0.2s; background:transparent; border:none; cursor:pointer;
     }
-    .top-bar .right a:hover { color: #ffd700; }
+    .top-bar .right a:hover, .top-bar .right button:hover { color: #ffd700; }
 
     /* Profile */
+    .container { width: 1100px; max-width: calc(100% - 40px); margin: 18px auto; }
     .profile-header {
       display: flex; align-items: center; gap: 15px;
-      padding: 20px; background: white; margin: 20px;
+      padding: 20px; background: white; margin-bottom: 20px;
       border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .profile-header img {
       width: 70px; height: 70px; border-radius: 50%;
-      border: 2px solid #eee;
+      border: 2px solid #eee; object-fit:cover;
     }
+    .profile-actions { margin-left:auto; display:flex; gap:10px; align-items:center; }
 
     /* Account Cards */
     .balance-card {
       background: white; color: #003366; padding: 25px;
       display: flex; justify-content: space-between; flex-wrap: wrap;
-      border-radius: 10px; margin: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .balance-card h1 { font-size: 2em; margin: 10px 0; color: #1a4d3a; }
-    .balance-info p { margin: 5px 0; }
-    .account-number { text-align: right; font-size: 14px; }
+    .balance-info p { margin: 5px 0; color: #444; }
+    .account-number { text-align: right; font-size: 14px; color:#555; }
 
     /* Buttons */
     .action-buttons {
-      text-align: center; margin: 30px 0;
+      text-align: center; margin: 10px 0 30px;
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 12px;
     }
-    .action-buttons a {
-      background: #003366; color: white; padding: 12px 28px;
+    .action-buttons a, .btn {
+      background: #003366; color: white; padding: 12px 18px;
       text-decoration: none; border-radius: 6px;
-      font-weight: 600; font-size: 14px;
+      font-weight: 600; font-size: 14px; border:none; cursor:pointer;
       transition: background 0.3s;
     }
-    .action-buttons a:hover { background: #0055a4; }
+    .action-buttons a:hover, .btn:hover { background: #0055a4; }
 
     /* Collapsible Box */
     .transactions-box {
-      width: calc(100% - 40px);
-      margin: 0 auto 30px;
       background: white;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      overflow: hidden;
+      overflow: hidden; margin-bottom: 20px;
     }
     .transactions-header {
       background: #003366;
@@ -104,139 +106,617 @@
       margin-top: auto;
       font-size: 13px;
     }
+
+    /* Notifications Drawer */
+    .notif-drawer {
+      position: fixed; right: 20px; top: 70px; width: 320px; max-height: 60vh;
+      background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      overflow: auto; display: none; z-index: 120;
+    }
+    .notif-drawer h4 { padding: 12px; background:#f6f8fa; margin:0; border-bottom:1px solid #eee; }
+    .notif-item { padding: 12px; border-bottom:1px solid #f0f0f0; }
+    .notif-item.unread { background: #eef9ff; }
+
+    /* Chat widget */
+    .chat-window {
+      position: fixed; bottom: 20px; right: 20px; width: 360px; max-width: calc(100% - 40px);
+      background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      overflow: hidden; display: none; z-index: 200;
+    }
+    .chat-header { background:#003366; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; }
+    .chat-messages { height:320px; overflow:auto; padding:10px; background:#f7f9fb; }
+    .chat-input { display:flex; gap:8px; padding:10px; border-top:1px solid #eee; }
+    .chat-input input { flex:1; padding:8px 10px; border-radius:6px; border:1px solid #ddd; }
+
+    /* Admin Panel */
+    .admin-panel {
+      margin-top: 20px; background:white; border-radius:10px; padding:16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display:none;
+    }
+    .form-row { display:flex; gap:10px; margin-bottom:10px; }
+    .form-row input, .form-row select { flex:1; padding:8px; border-radius:6px; border:1px solid #ddd; }
+
+    /* small helpers */
+    .muted { color:#666; font-size:13px; }
+    .right-align { text-align:right; }
+    .hidden { display:none; }
+    .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:30px; background:#222; color:white; padding:10px 14px; border-radius:8px; display:none; z-index:999; }
+    .small { font-size:13px; }
+
+    @media (max-width: 720px) {
+      .container { width: calc(100% - 20px); margin: 10px; }
+      .balance-card { flex-direction:column; gap:12px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Top bar -->
   <header class="top-bar">
     <div class="left">
       <img src="auth/usa.jpg" alt="USA Flag" class="flag">
       <select><option>English</option></select>
     </div>
     <div class="right">
-      <a href="#">Settings</a>
+      <button id="btnNotif" title="Notifications">🔔 <span id="notifCount">0</span></button>
+      <button id="btnChatToggle" title="Chat Support">💬</button>
+      <a href="#" id="btnAdminToggle" class="hidden">Admin</a>
       <a href="#" onclick="logout()">Logout</a>
     </div>
   </header>
 
-  <!-- Profile -->
-  <section class="profile-header">
-    <img src="auth/profile.jfif" alt="YDO Yumart">
-    <div class="details">
-      <h3>YDO Yumart</h3>
-      <p>Demo Account Holder</p>
-    </div>
-  </section>
+  <!-- content container -->
+  <div class="container">
+    <!-- Profile -->
+    <section class="profile-header">
+      <img src="auth/profile.jfif" alt="profile" id="profilePic">
+      <div class="details">
+        <h3 id="userName">Loading...</h3>
+        <p class="muted" id="userEmail">Loading email...</p>
+      </div>
+      <div class="profile-actions">
+        <button class="btn" id="btnRefresh">Refresh</button>
+      </div>
+    </section>
 
-  <!-- Checking Account -->
-  <section class="balance-card">
-    <div class="balance-info">
-      <p>Checking Account Balance</p>
-      <h1>$85,420.75 USD</h1>
-      <p>Account Name<br><strong>YDO Yumart</strong></p>
-    </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>1234567890</strong><br/>
-      <p>Routing Number</p><strong>111000025</strong>
-    </div>
-  </section>
+    <!-- Checking Account -->
+    <section class="balance-card">
+      <div class="balance-info">
+        <p>Checking Account Balance</p>
+        <h1 id="checkingBalance">$0.00 USD</h1>
+        <p class="small">Account Name<br><strong id="checkingName">—</strong></p>
+      </div>
+      <div class="account-number">
+        <p class="small">Account Number</p><strong id="checkingNumber">----</strong><br/>
+        <p class="small">Routing Number</p><strong id="checkingRouting">----</strong>
+      </div>
+    </section>
 
-  <!-- Saving Account -->
-  <section class="balance-card">
-    <div class="balance-info">
-      <p>Savings Account Balance</p>
-      <h1>$152,390.40 USD</h1>
-      <p>Account Name<br><strong>YDO Yumart</strong></p>
-    </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>9876543210</strong><br/>
-      <p>Routing Number</p><strong>111000025</strong>
-    </div>
-  </section>
+    <!-- Saving Account -->
+    <section class="balance-card">
+      <div class="balance-info">
+        <p>Savings Account Balance</p>
+        <h1 id="savingBalance">$0.00 USD</h1>
+        <p class="small">Account Name<br><strong id="savingName">—</strong></p>
+      </div>
+      <div class="account-number">
+        <p class="small">Account Number</p><strong id="savingNumber">----</strong><br/>
+        <p class="small">Routing Number</p><strong id="savingRouting">----</strong>
+      </div>
+    </section>
 
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <a href="transfer.html">Transfer</a>
-    <a href="deposit.html">Deposit</a>
-    <a href="withdraw.html">Withdraw</a>
-    <a href="wire.html">Wire</a>
-    <a href="ach.html">ACH</a>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn" id="openTransfer">Transfer</button>
+      <button class="btn" id="openDeposit">Deposit</button>
+      <button class="btn" id="openWithdraw">Withdraw</button>
+      <a class="btn" href="wire.html">Wire</a>
+      <a class="btn" href="ach.html">ACH</a>
+    </div>
+
+    <!-- Transactions History -->
+    <div class="transactions-box">
+      <div class="transactions-header" onclick="toggleHistory()">
+        View Transactions History <span id="arrow">▼</span>
+      </div>
+      <div class="transactions-content" id="historyBox">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Amount (USD)</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody id="transactionTable">
+            <tr><td colspan="5">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Admin Panel (visible only to admins) -->
+    <div class="admin-panel" id="adminPanel">
+      <h3>Admin Dashboard</h3>
+      <div class="small muted">Perform deposits, withdrawals or send funds on behalf of users. Actions are recorded as transactions.</div>
+
+      <div style="margin-top:12px;">
+        <strong>Deposit to user</strong>
+        <div class="form-row">
+          <input id="adminDepositEmail" placeholder="User email (recipient)">
+          <input id="adminDepositAmount" placeholder="Amount">
+          <button class="btn" id="adminDepositBtn">Deposit</button>
+        </div>
+
+        <strong>Withdraw from user</strong>
+        <div class="form-row">
+          <input id="adminWithdrawEmail" placeholder="User email (source)">
+          <input id="adminWithdrawAmount" placeholder="Amount">
+          <button class="btn" id="adminWithdrawBtn">Withdraw</button>
+        </div>
+
+        <strong>Admin Audit / Transactions</strong>
+        <div style="margin-top:10px;">
+          <button class="btn" id="adminFetchTx">Refresh Transactions</button>
+          <div style="margin-top:10px;">
+            <table style="width:100%;">
+              <thead><tr><th>Date</th><th>Type</th><th>From</th><th>To</th><th>Amount</th></tr></thead>
+              <tbody id="adminTxTable"><tr><td colspan="5">No data</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top:18px;">
+      &copy; <span id="year"></span> Military Banking Dashboard. All rights reserved.
+    </footer>
   </div>
 
-  <!-- Transactions History -->
-  <div class="transactions-box">
-    <div class="transactions-header" onclick="toggleHistory()">
-      View Transactions History <span id="arrow">▼</span>
-    </div>
-    <div class="transactions-content" id="historyBox">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Amount (USD)</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-        <tbody>
-  <tr><td>1</td><td>2025-09-01</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>2</td><td>2025-08-25</td><td>Mission Bonus - Operation Shield</td><td>$2,000.00</td><td>Deposit</td></tr>
-  <tr><td>3</td><td>2025-08-10</td><td>Uniform Allowance</td><td>$500.00</td><td>Deposit</td></tr>
-  <tr><td>4</td><td>2025-07-30</td><td>Medical Reimbursement</td><td>$320.00</td><td>Deposit</td></tr>
-  <tr><td>5</td><td>2025-07-20</td><td>Mission Award - Excellence</td><td>$1,500.00</td><td>Deposit</td></tr>
-  <tr><td>6</td><td>2025-07-05</td><td>ATM Withdrawal - Los Angeles</td><td>-$200.00</td><td>Withdraw</td></tr>
-  <tr><td>7</td><td>2025-06-28</td><td>Army Salary - June</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>8</td><td>2025-06-15</td><td>Appointment Payment</td><td>$1,200.00</td><td>Deposit</td></tr>
-  <tr><td>9</td><td>2025-05-30</td><td>Wire Transfer to Family</td><td>-$1,000.00</td><td>Wire</td></tr>
-  <tr><td>10</td><td>2025-05-12</td><td>Mission Bonus - Training Drill</td><td>$750.00</td><td>Deposit</td></tr>
-  <tr><td>11</td><td>2025-04-30</td><td>Army Salary - April</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>12</td><td>2025-04-18</td><td>Travel Allowance</td><td>$450.00</td><td>Deposit</td></tr>
-  <tr><td>13</td><td>2025-04-05</td><td>ATM Withdrawal - Washington</td><td>-$300.00</td><td>Withdraw</td></tr>
-  <tr><td>14</td><td>2025-03-29</td><td>Army Salary - March</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>15</td><td>2025-03-10</td><td>Mission Award - Leadership</td><td>$1,000.00</td><td>Deposit</td></tr>
-  <tr><td>16</td><td>2025-02-28</td><td>Army Salary - February</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>17</td><td>2025-02-20</td><td>Wire Transfer to Savings</td><td>-$2,000.00</td><td>Wire</td></tr>
-  <tr><td>18</td><td>2025-02-05</td><td>Medical Reimbursement</td><td>$280.00</td><td>Deposit</td></tr>
-  <tr><td>19</td><td>2025-01-31</td><td>Army Salary - January</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>20</td><td>2025-01-15</td><td>Mission Bonus - Winter Ops</td><td>$1,500.00</td><td>Deposit</td></tr>
-  <tr><td>21</td><td>2024-12-30</td><td>Army Salary - December</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>22</td><td>2024-12-22</td><td>Holiday Bonus</td><td>$1,200.00</td><td>Deposit</td></tr>
-  <tr><td>23</td><td>2024-12-05</td><td>ATM Withdrawal - New York</td><td>-$400.00</td><td>Withdraw</td></tr>
-  <tr><td>24</td><td>2024-11-30</td><td>Army Salary - November</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>25</td><td>2024-11-18</td><td>Appointment Payment</td><td>$1,100.00</td><td>Deposit</td></tr>
-  <tr><td>26</td><td>2024-10-31</td><td>Army Salary - October</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>27</td><td>2024-10-20</td><td>Mission Bonus - Field Exercise</td><td>$900.00</td><td>Deposit</td></tr>
-  <tr><td>28</td><td>2024-09-30</td><td>Army Salary - September</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>29</td><td>2024-09-12</td><td>Wire Transfer - Equipment Purchase</td><td>-$1,500.00</td><td>Wire</td></tr>
-  <tr><td>30</td><td>2024-08-30</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
-</tbody>
+  <!-- Notifications Drawer -->
+  <div class="notif-drawer" id="notifDrawer">
+    <h4>Notifications <button id="markAllRead" style="float:right;padding:6px;border-radius:6px;border:none;background:#003366;color:#fff;cursor:pointer;">Mark all read</button></h4>
+    <div id="notifList"></div>
+  </div>
 
-      </table>
+  <!-- Chat window -->
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div>Support Chat</div>
+      <div><button id="closeChat" style="background:transparent;border:none;color:white;cursor:pointer;">✖</button></div>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Type a message..." />
+      <button class="btn" id="sendChat">Send</button>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    &copy; <span id="year"></span> Military Banking Dashboard. All rights reserved.
-  </footer>
+  <!-- Transfer / Deposit / Withdraw Modals (simple) -->
+  <div id="modalRoot" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:300;">
+    <div id="modal" style="width:420px;max-width:95%;background:white;padding:18px;border-radius:10px;">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end;">
+        <button id="modalCancel" class="btn" style="background:#aaa;">Cancel</button>
+        <button id="modalSubmit" class="btn">Submit</button>
+      </div>
+    </div>
+  </div>
 
+  <div class="toast" id="toast"></div>
+
+  <!-- socket.io client (assumes server serves it) -->
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    function toggleHistory() {
-      const box = document.getElementById("historyBox");
-      const arrow = document.getElementById("arrow");
-      if (box.style.display === "block") {
-        box.style.display = "none";
-        arrow.textContent = "▼";
-      } else {
-        box.style.display = "block";
-        arrow.textContent = "▲";
+    // -----------------------
+    // Utility helpers
+    // -----------------------
+    function $id(id){ return document.getElementById(id); }
+    function showToast(msg, ms=3000){ const t=$id('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none', ms); }
+
+    function formatMoney(n){
+      return (Number(n) || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    // -----------------------
+    // Auth: get token
+    // -----------------------
+    function getAuthHeaders(){
+      const token = localStorage.getItem('authToken');
+      return token ? { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+    }
+
+    // -----------------------
+    // Page controls
+    // -----------------------
+    function toggleHistory(){
+      const box = $id('historyBox');
+      const arrow = $id('arrow');
+      if (box.style.display === 'block') { box.style.display = 'none'; arrow.textContent='▼'; }
+      else { box.style.display = 'block'; arrow.textContent='▲'; }
+    }
+    $id('arrow').textContent = '▼';
+    $id('year').textContent = new Date().getFullYear();
+
+    // -----------------------
+    // Modal helper
+    // -----------------------
+    function openModal({ title, html, onSubmitText='Submit', onSubmit }) {
+      $id('modalTitle').textContent = title;
+      $id('modalBody').innerHTML = html;
+      $id('modalSubmit').textContent = onSubmitText;
+      $id('modalRoot').style.display = 'flex';
+      $id('modalCancel').onclick = closeModal;
+      $id('modalSubmit').onclick = async () => {
+        try {
+          await onSubmit();
+        } catch(err) {
+          console.error(err);
+          showToast(err.message || 'Action failed');
+        }
+      };
+    }
+    function closeModal(){ $id('modalRoot').style.display = 'none'; }
+
+    // -----------------------
+    // Load Dashboard (balances, tx)
+    // -----------------------
+    async function loadDashboard(){
+      try {
+        const headers = getAuthHeaders();
+        // Balance (assumes endpoint returns shape: { userName, email, role, checking, savings, checkingAccount, savingAccount, routing } )
+        const balRes = await fetch('/api/balance', { headers });
+        if (!balRes.ok) throw new Error('Failed to load balance — check login');
+        const balance = await balRes.json();
+
+        // fill UI
+        $id('userName').textContent = balance.userName || balance.display_name || 'User';
+        $id('userEmail').textContent = balance.email || '';
+        $id('checkingBalance').textContent = '$' + formatMoney(balance.checking || 0) + ' USD';
+        $id('savingBalance').textContent = '$' + formatMoney(balance.savings || 0) + ' USD';
+        $id('checkingName').textContent = balance.userName || '-';
+        $id('savingName').textContent = balance.userName || '-';
+        $id('checkingNumber').textContent = balance.checkingAccount || '1234567890';
+        $id('savingNumber').textContent = balance.savingAccount || '9876543210';
+        $id('checkingRouting').textContent = balance.routing || '111000025';
+        $id('savingRouting').textContent = balance.routing || '111000025';
+
+        // show admin panel toggle if role=admin
+        if (balance.role === 'admin') {
+          $id('adminPanel').style.display='block';
+          $id('btnAdminToggle').classList.remove('hidden');
+        } else {
+          $id('adminPanel').style.display='none';
+          $id('btnAdminToggle').classList.add('hidden');
+        }
+
+        // transactions
+        await loadTransactions();
+
+        // notifications quick load
+        await loadNotifications();
+
+      } catch (err) {
+        console.error(err);
+        showToast('Cannot load dashboard — ensure you are logged in.');
       }
     }
-    document.getElementById("year").textContent = new Date().getFullYear();
-    function logout() {
-      alert("Logged out (demo).");
+
+    async function loadTransactions(){
+      try {
+        const headers = getAuthHeaders();
+        const res = await fetch('/api/transactions', { headers });
+        if (!res.ok) { console.warn('No transactions or not authorized'); $id('transactionTable').innerHTML='<tr><td colspan="5">No transactions</td></tr>'; return; }
+        const tx = await res.json();
+        const tbody = $id('transactionTable');
+        tbody.innerHTML = '';
+        if (!Array.isArray(tx) || tx.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">No transactions</td></tr>';
+          return;
+        }
+        tx.forEach((t, i) => {
+          const date = new Date(t.created_at || t.date || t.timestamp || Date.now()).toISOString().split('T')[0];
+          const amount = Number(t.amount || 0);
+          const amountStr = amount >= 0 ? '$' + formatMoney(amount) : '-$' + formatMoney(Math.abs(amount));
+          const type = (t.tx_type || t.type || t.kind || 'Unknown');
+          const desc = t.description || t.reference || (t.tx_type === 'transfer' ? `Transfer ${t.reference || ''}` : type);
+          tbody.innerHTML += `<tr>
+            <td>${i+1}</td>
+            <td>${date}</td>
+            <td>${escapeHtml(desc)}</td>
+            <td>${amountStr}</td>
+            <td>${escapeHtml(capitalize(type))}</td>
+          </tr>`;
+        });
+      } catch(err){ console.error(err); showToast('Failed to load transactions'); }
+    }
+
+    // -----------------------
+    // Notifications
+    // -----------------------
+    async function loadNotifications(){
+      try {
+        const headers = getAuthHeaders();
+        const res = await fetch('/api/notifications', { headers });
+        if (!res.ok) { $id('notifCount').textContent = 0; return; }
+        const notes = await res.json();
+        $id('notifCount').textContent = notes.filter(n=>!n.is_read).length;
+        const list = $id('notifList'); list.innerHTML = '';
+        if (!notes.length) list.innerHTML = '<div class="notif-item">No notifications</div>';
+        notes.forEach(n => {
+          const cls = n.is_read ? 'notif-item' : 'notif-item unread';
+          list.innerHTML += `<div class="${cls}" data-id="${n.id}">
+            <div style="font-weight:600">${escapeHtml(n.title)}</div>
+            <div class="small muted">${escapeHtml(n.body || '')}</div>
+            <div class="small right-align">${new Date(n.created_at).toLocaleString()}</div>
+            <div style="margin-top:6px;"><button class="btn small" onclick="markRead(${n.id})">Mark read</button></div>
+          </div>`;
+        });
+      } catch(e){ console.error(e); }
+    }
+
+    async function markRead(id){
+      try {
+        const headers = getAuthHeaders();
+        const res = await fetch(`/api/notifications/${id}/read`, { method:'POST', headers });
+        if (res.ok) {
+          showToast('Marked read');
+          await loadNotifications();
+        }
+      } catch(e){ console.error(e); }
+    }
+
+    // mark all read
+    $id('markAllRead').addEventListener('click', async () => {
+      try {
+        const headers = getAuthHeaders();
+        const res = await fetch('/api/notifications/mark-all-read', { method:'POST', headers });
+        if (res.ok) { showToast('All notifications marked'); loadNotifications(); }
+      } catch(e){ console.error(e); }
+    });
+
+    // toggle notif drawer
+    $id('btnNotif').addEventListener('click', () => {
+      const d = $id('notifDrawer');
+      d.style.display = d.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // -----------------------
+    // Chat (socket) & UI
+    // -----------------------
+    let socket = null;
+    function initSocket() {
+      try {
+        // assumes socket.io served at same origin
+        socket = io();
+
+        // when authenticated, emit join with userId if available
+        fetch('/api/me', { headers: getAuthHeaders() }).then(r => r.json()).then(profile => {
+          socket.emit('join', { userId: profile.id });
+        }).catch(()=>{ /* ignore */ });
+
+        socket.on('connect', ()=> console.log('socket connected', socket.id));
+        socket.on('notification', async (payload) => {
+          // payload should be { userId, title, body, ... }
+          // reload notifications
+          await loadNotifications();
+          showToast('New notification: ' + (payload.title || ''));
+        });
+
+        // chat
+        socket.on('chat:message', msg => {
+          appendChatMessage(msg);
+        });
+
+      } catch(err){ console.warn('Socket init failed', err); }
+    }
+
+    // chat UI
+    $id('btnChatToggle').addEventListener('click', () => {
+      const w = $id('chatWindow');
+      w.style.display = w.style.display === 'block' ? 'none' : 'block';
+    });
+    $id('closeChat').addEventListener('click', ()=> $id('chatWindow').style.display='none');
+
+    function appendChatMessage(msg){
+      const c = $id('chatMessages');
+      const el = document.createElement('div');
+      el.style.marginBottom='10px';
+      el.innerHTML = `<div style="font-size:13px;"><strong>${escapeHtml(msg.sender_name || msg.sender || 'Support')}</strong> <span class="small muted"> ${new Date(msg.created_at || Date.now()).toLocaleTimeString()}</span></div><div>${escapeHtml(msg.message)}</div>`;
+      c.appendChild(el);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    $id('sendChat').addEventListener('click', sendChatMessage);
+    $id('chatInput').addEventListener('keydown', (e)=> { if(e.key === 'Enter') sendChatMessage(); });
+
+    async function sendChatMessage(){
+      const text = $id('chatInput').value.trim();
+      if (!text) return;
+      // simple approach: emit socket event; backend should persist
+      if (socket && socket.connected) {
+        socket.emit('chat:message', { chatId: 'support', senderId: 'me', message: text });
+        appendChatMessage({ sender_name: 'You', message: text, created_at: Date.now() });
+        $id('chatInput').value = '';
+      } else {
+        // fallback: POST to /api/chat
+        try {
+          const res = await fetch('/api/chat', { method:'POST', headers:getAuthHeaders(), body: JSON.stringify({ message:text }) });
+          if (res.ok) { appendChatMessage({ sender_name:'You', message:text, created_at: Date.now() }); $id('chatInput').value=''; }
+        } catch(e){ console.error(e); showToast('Failed to send chat'); }
+      }
+    }
+
+    // -----------------------
+    // Transfer / Deposit / Withdraw actions (user)
+    // -----------------------
+    $id('openTransfer').addEventListener('click', () => {
+      openModal({
+        title:'Transfer Money',
+        html:`<div style="display:flex;flex-direction:column;gap:8px;">
+                <input id="tx_to_email" placeholder="Recipient email" />
+                <input id="tx_amount" placeholder="Amount (USD)" />
+                <input id="tx_reference" placeholder="Reference (optional)" />
+               </div>`,
+        onSubmitText:'Send',
+        onSubmit: async () => {
+          const to_email = $id('tx_to_email').value.trim();
+          const amount = Number($id('tx_amount').value);
+          const reference = $id('tx_reference').value.trim();
+          if (!to_email || !amount || amount <= 0) throw new Error('Provide valid recipient and amount');
+          const headers = getAuthHeaders();
+          const res = await fetch('/api/transfer', { method:'POST', headers, body: JSON.stringify({ to_email, amount, reference }) });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Transfer failed');
+          showToast('Transfer successful');
+          closeModal();
+          await loadDashboard();
+        }
+      });
+    });
+
+    $id('openDeposit').addEventListener('click', () => {
+      openModal({
+        title:'Deposit Money',
+        html:`<div style="display:flex;flex-direction:column;gap:8px;">
+                <input id="dep_amount" placeholder="Amount (USD)" />
+                <select id="dep_account"><option value="checking">Checking</option><option value="savings">Savings</option></select>
+               </div>`,
+        onSubmitText:'Deposit',
+        onSubmit: async () => {
+          const amount = Number($id('dep_amount').value);
+          const account = $id('dep_account').value;
+          if (!amount || amount <= 0) throw new Error('Provide valid amount');
+          const headers = getAuthHeaders();
+          // For demo, deposit endpoint might be /api/deposit
+          const res = await fetch('/api/deposit', { method:'POST', headers, body: JSON.stringify({ amount, account }) });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Deposit failed');
+          showToast('Deposit successful');
+          closeModal();
+          await loadDashboard();
+        }
+      });
+    });
+
+    $id('openWithdraw').addEventListener('click', () => {
+      openModal({
+        title:'Withdraw Money',
+        html:`<div style="display:flex;flex-direction:column;gap:8px;">
+                <input id="wd_amount" placeholder="Amount (USD)" />
+                <select id="wd_account"><option value="checking">Checking</option><option value="savings">Savings</option></select>
+               </div>`,
+        onSubmitText:'Withdraw',
+        onSubmit: async () => {
+          const amount = Number($id('wd_amount').value);
+          const account = $id('wd_account').value;
+          if (!amount || amount <= 0) throw new Error('Provide valid amount');
+          const headers = getAuthHeaders();
+          // withdraw endpoint /api/withdraw
+          const res = await fetch('/api/withdraw', { method:'POST', headers, body: JSON.stringify({ amount, account }) });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Withdraw failed');
+          showToast('Withdraw successful');
+          closeModal();
+          await loadDashboard();
+        }
+      });
+    });
+
+    // -----------------------
+    // Admin actions
+    // -----------------------
+    $id('adminDepositBtn').addEventListener('click', async () => {
+      const email = $id('adminDepositEmail').value.trim();
+      const amount = Number($id('adminDepositAmount').value);
+      if (!email || !amount || amount <= 0) return showToast('Provide valid inputs');
+      try {
+        const res = await fetch('/api/admin/deposit', { method:'POST', headers:getAuthHeaders(), body: JSON.stringify({ to_email: email, amount }) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Admin deposit failed');
+        showToast('Admin deposit successful');
+        $id('adminDepositEmail').value=''; $id('adminDepositAmount').value='';
+        await loadDashboard();
+      } catch(e){ console.error(e); showToast(e.message || 'Admin deposit failed'); }
+    });
+
+    $id('adminWithdrawBtn').addEventListener('click', async () => {
+      const email = $id('adminWithdrawEmail').value.trim();
+      const amount = Number($id('adminWithdrawAmount').value);
+      if (!email || !amount || amount <= 0) return showToast('Provide valid inputs');
+      try {
+        const res = await fetch('/api/admin/withdraw', { method:'POST', headers:getAuthHeaders(), body: JSON.stringify({ from_email: email, amount }) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Admin withdraw failed');
+        showToast('Admin withdraw successful');
+        $id('adminWithdrawEmail').value=''; $id('adminWithdrawAmount').value='';
+        await loadDashboard();
+      } catch(e){ console.error(e); showToast(e.message || 'Admin withdraw failed'); }
+    });
+
+    $id('adminFetchTx').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/transactions?all=true', { headers:getAuthHeaders() });
+        const txs = await res.json();
+        const tbody = $id('adminTxTable'); tbody.innerHTML = '';
+        if (!Array.isArray(txs) || txs.length===0) tbody.innerHTML='<tr><td colspan="5">No data</td></tr>';
+        else {
+          txs.forEach(t=>{
+            const date = new Date(t.created_at).toLocaleString();
+            t.from_email = t.from_email || t.from_user_email || '-';
+            t.to_email = t.to_email || t.to_user_email || '-';
+            t.amount = Number(t.amount || 0);
+            tbody.innerHTML += `<tr><td>${escapeHtml(date)}</td><td>${escapeHtml(t.tx_type)}</td><td>${escapeHtml(t.from_email)}</td><td>${escapeHtml(t.to_email)}</td><td>$${formatMoney(t.amount)}</td></tr>`;
+          });
+        }
+      } catch(e){ console.error(e); showToast('Failed to fetch admin tx'); }
+    });
+
+    // Admin toggle anchor opens/closes panel
+    $id('btnAdminToggle').addEventListener('click', (e) => { e.preventDefault(); const p = $id('adminPanel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; });
+
+    // Refresh button
+    $id('btnRefresh').addEventListener('click', () => loadDashboard());
+
+    // -----------------------
+    // Helpers
+    // -----------------------
+    function capitalize(s){ if(!s) return ''; return String(s).charAt(0).toUpperCase()+String(s).slice(1); }
+    function escapeHtml(unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // -----------------------
+    // Startup
+    // -----------------------
+    (function init(){
+      // load and init sockets
+      initSocket();
+
+      // initial load
+      loadDashboard();
+
+      // poll notifications in background every 12s (socket will handle real-time)
+      setInterval(loadNotifications, 12000);
+    })();
+
+    // -----------------------
+    // Logout helper
+    // -----------------------
+    function logout(){
+      localStorage.removeItem('authToken');
+      // if you have a login page, redirect to it. For demo show message.
+      window.location.href = 'login.html';
     }
   </script>
 </body>
