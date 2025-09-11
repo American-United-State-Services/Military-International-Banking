@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Financia Global Services Dashboard</title>
+  <title>Financia Global Services Dashboard (Demo)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background: #f7f9fb; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
@@ -14,7 +14,6 @@
       background: #003366; color: white; padding: 12px 25px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
     .top-bar .left { display: flex; align-items: center; gap: 12px; }
     .top-bar .flag { width: 28px; height: 18px; border: 1px solid #ccc; }
     .top-bar select {
@@ -33,7 +32,6 @@
       padding: 20px; background: white; margin: 20px;
       border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
-
     .profile-header img {
       width: 70px; height: 70px; border-radius: 50%;
       border: 2px solid #eee;
@@ -45,7 +43,6 @@
       display: flex; justify-content: space-between; flex-wrap: wrap;
       border-radius: 10px; margin: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
-
     .balance-card h1 { font-size: 2em; margin: 10px 0; color: #1a4d3a; }
     .balance-info p { margin: 5px 0; }
     .account-number { text-align: right; font-size: 14px; }
@@ -56,7 +53,6 @@
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 12px;
     }
-
     .action-buttons a {
       background: #003366; color: white; padding: 12px 28px;
       text-decoration: none; border-radius: 6px;
@@ -65,18 +61,32 @@
     }
     .action-buttons a:hover { background: #0055a4; }
 
-    /* Table */
-    .transactions-title {
-      margin: 20px 20px 10px; font-weight: bold; font-size: 18px; color: #003366;
-    }
-
-    table {
-      width: calc(100% - 40px); margin: 0 auto 30px;
-      border-collapse: collapse; background: white;
-      border-radius: 10px; overflow: hidden;
+    /* Collapsible Box */
+    .transactions-box {
+      width: calc(100% - 40px);
+      margin: 0 auto 30px;
+      background: white;
+      border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
-
+    .transactions-header {
+      background: #003366;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .transactions-content {
+      display: none;
+      padding: 20px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 10px;
+    }
     thead { background: #003366; color: white; }
     th, td {
       padding: 12px; text-align: center; font-size: 14px;
@@ -94,29 +104,7 @@
       margin-top: auto;
       font-size: 13px;
     }
-
-    @media screen and (max-width: 768px) {
-      .balance-card { flex-direction: column; gap: 15px; }
-      .account-number { text-align: left; }
-      .action-buttons { flex-direction: column; }
-    }
   </style>
-  <script>
-    // Check if user is logged in
-    window.onload = function() {
-      const loggedIn = sessionStorage.getItem("loggedIn");
-      if (!loggedIn) {
-        window.location.href = "auth/login.html";
-      }
-      console.log("Welcome to the dashboard. Session active.");
-    };
-
-    // Logout
-    function logout() {
-      sessionStorage.removeItem("loggedIn");
-      window.location.href = "auth/login.html";
-    }
-  </script>
 </head>
 <body>
 
@@ -127,17 +115,17 @@
       <select><option>English</option></select>
     </div>
     <div class="right">
-      <a href="settings.html">Settings</a>
-      <a href="logout.html" onclick="logout()">Logout</a>
+      <a href="#">Settings</a>
+      <a href="#" onclick="logout()">Logout</a>
     </div>
   </header>
 
   <!-- Profile -->
   <section class="profile-header">
-    <img src="auth/profile.jfif" alt="Peter Ramstushitt">
+    <img src="auth/profile.jfif" alt="YDO Yumart">
     <div class="details">
-      <h3>Peter Ramstushitt</h3>
-      <p>9026 Thrasher Ave, New York 90003</p>
+      <h3>YDO Yumart</h3>
+      <p>Demo Account Holder</p>
     </div>
   </section>
 
@@ -145,94 +133,111 @@
   <section class="balance-card">
     <div class="balance-info">
       <p>Checking Account Balance</p>
-      <h1>$150,000,000.00 USD</h1>
-      <p>Account Name<br><strong>Peter Ramstushitt</strong></p>
+      <h1>$85,420.75 USD</h1>
+      <p>Account Name<br><strong>YDO Yumart</strong></p>
     </div>
     <div class="account-number">
-      <p>Account Number</p><strong>8787504713</strong><br/>
-      <p>Routing Number</p><strong>101000022</strong>
+      <p>Account Number</p><strong>1234567890</strong><br/>
+      <p>Routing Number</p><strong>111000025</strong>
     </div>
   </section>
 
   <!-- Saving Account -->
   <section class="balance-card">
     <div class="balance-info">
-      <p>Saving Account Balance</p>
-      <h1>$110,000,000.00 USD</h1>
-      <p>Account Name<br><strong>Peter Ramstushitt</strong></p>
+      <p>Savings Account Balance</p>
+      <h1>$152,390.40 USD</h1>
+      <p>Account Name<br><strong>YDO Yumart</strong></p>
     </div>
     <div class="account-number">
-      <p>Account Number</p><strong>5400310988</strong><br/>
-      <p>Routing Number</p><strong>749000198</strong>
+      <p>Account Number</p><strong>9876543210</strong><br/>
+      <p>Routing Number</p><strong>111000025</strong>
     </div>
   </section>
-  
+
   <!-- Action Buttons -->
   <div class="action-buttons">
-    <a href="transfer-form.html">Transfer</a>
-    <a href="receive-form.html">Receive</a>
-    <a href="ach-form.html">ACH</a>
-    <a href="wire-transfer-form.html">Wire Transfer</a>
-    <a href="deposit-form.html">Deposit</a>
-    <a href="withdraw-form.html">Withdraw</a>
+    <a href="transfer.html">Transfer</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+    <a href="wire.html">Wire</a>
+    <a href="ach.html">ACH</a>
   </div>
 
-  <!-- Transaction Table -->
-  <div class="transactions-title">Transaction History</div>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Date</th>
-        <th>Bank</th>
-        <th>Sender</th>
-        <th>Amount (USD)</th>
-        <th>Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- keep all your 30 records exactly the same -->
-      <tr><td>1</td><td>2024-05-12</td><td>Chase Bank</td><td>Emily Carter</td><td>$10,500</td><td>Deposit</td></tr>
-      <tr><td>2</td><td>2024-06-03</td><td>Wells Fargo</td><td>John Smith</td><td>$12,800</td><td>ACH</td></tr>
-      <tr><td>3</td><td>2024-06-24</td><td>Bank of America</td><td>Lisa Johnson</td><td>$15,000</td><td>Transfer</td></tr>
-      <tr><td>4</td><td>2024-07-02</td><td>Capital One</td><td>David Lee</td><td>$25,500</td><td>Wire Transfer</td></tr>
-      <tr><td>5</td><td>2024-07-20</td><td>Citi Bank</td><td>Jennifer Adams</td><td>$11,400</td><td>Deposit</td></tr>
-      <tr><td>6</td><td>2024-08-08</td><td>HSBC USA</td><td>Michael Rodriguez</td><td>$20,000</td><td>ACH</td></tr>
-      <tr><td>7</td><td>2024-08-26</td><td>PNC Bank</td><td>Susan Martinez</td><td>$30,300</td><td>Wire Transfer</td></tr>
-      <tr><td>8</td><td>2024-09-15</td><td>TD Bank</td><td>Robert Taylor</td><td>$18,750</td><td>Transfer</td></tr>
-      <tr><td>9</td><td>2024-09-29</td><td>US Bank</td><td>Mary Walker</td><td>$14,200</td><td>Withdraw</td></tr>
-      <tr><td>10</td><td>2024-10-11</td><td>Regions Bank</td><td>Daniel Harris</td><td>$16,800</td><td>Deposit</td></tr>
-      <tr><td>11</td><td>2024-10-27</td><td>SunTrust Bank</td><td>Patricia Allen</td><td>$22,500</td><td>ACH</td></tr>
-      <tr><td>12</td><td>2024-11-12</td><td>BB&T Bank</td><td>Steven Clark</td><td>$28,000</td><td>Wire Transfer</td></tr>
-      <tr><td>13</td><td>2024-12-01</td><td>Fifth Third Bank</td><td>Donna Lewis</td><td>$35,000</td><td>Transfer</td></tr>
-      <tr><td>14</td><td>2024-12-19</td><td>Ally Bank</td><td>Thomas Young</td><td>$19,900</td><td>Receive</td></tr>
-      <tr><td>15</td><td>2025-01-04</td><td>KeyBank</td><td>Elizabeth King</td><td>$16,450</td><td>Deposit</td></tr>
-      <tr><td>16</td><td>2025-01-19</td><td>Discover Bank</td><td>Mark Wright</td><td>$23,100</td><td>Withdraw</td></tr>
-      <tr><td>17</td><td>2025-02-05</td><td>First Republic Bank</td><td>Carol Hill</td><td>$27,800</td><td>ACH</td></tr>
-      <tr><td>18</td><td>2025-02-22</td><td>Charles Schwab Bank</td><td>Matthew Scott</td><td>$33,200</td><td>Wire Transfer</td></tr>
-      <tr><td>19</td><td>2025-03-10</td><td>SoFi Bank</td><td>Amy Green</td><td>$45,600</td><td>Transfer</td></tr>
-      <tr><td>20</td><td>2025-03-25</td><td>Robinhood Bank</td><td>Larry Baker</td><td>$26,350</td><td>Deposit</td></tr>
-      <tr><td>21</td><td>2025-04-02</td><td>American Express Bank</td><td>Samantha Nelson</td><td>$38,000</td><td>ACH</td></tr>
-      <tr><td>22</td><td>2025-04-10</td><td>Comerica Bank</td><td>Joshua Hall</td><td>$40,100</td><td>Wire Transfer</td></tr>
-      <tr><td>23</td><td>2025-04-17</td><td>Citizens Bank</td><td>Rebecca Allen</td><td>$13,600</td><td>Transfer</td></tr>
-      <tr><td>24</td><td>2025-04-25</td><td>First Horizon Bank</td><td>Anthony Phillips</td><td>$29,900</td><td>Deposit</td></tr>
-      <tr><td>25</td><td>2025-05-01</td><td>Huntington Bank</td><td>Karen Campbell</td><td>$17,750</td><td>Withdraw</td></tr>
-      <tr><td>26</td><td>2025-05-04</td><td>Old National Bank</td><td>Jason Stewart</td><td>$21,200</td><td>ACH</td></tr>
-      <tr><td>27</td><td>2025-05-10</td><td>Santander Bank</td><td>Rachel Turner</td><td>$44,500</td><td>Receive</td></tr>
-      <tr><td>28</td><td>2025-05-14</td><td>Flagstar Bank</td><td>Jeffrey Ramirez</td><td>$31,700</td><td>Wire Transfer</td></tr>
-      <tr><td>29</td><td>2025-05-20</td><td>BMO Harris Bank</td><td>Angela Cox</td><td>$36,900</td><td>Transfer</td></tr>
-      <tr><td>30</td><td>2025-05-27</td><td>Truist Bank</td><td>Eric Edwards</td><td>$42,300</td><td>Deposit</td></tr>
-    </tbody>
-  </table>
+  <!-- Transactions History -->
+  <div class="transactions-box">
+    <div class="transactions-header" onclick="toggleHistory()">
+      View Transactions History <span id="arrow">▼</span>
+    </div>
+    <div class="transactions-content" id="historyBox">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Amount (USD)</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+  <tr><td>1</td><td>2025-09-01</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>2</td><td>2025-08-25</td><td>Mission Bonus - Operation Shield</td><td>$2,000.00</td><td>Deposit</td></tr>
+  <tr><td>3</td><td>2025-08-10</td><td>Uniform Allowance</td><td>$500.00</td><td>Deposit</td></tr>
+  <tr><td>4</td><td>2025-07-30</td><td>Medical Reimbursement</td><td>$320.00</td><td>Deposit</td></tr>
+  <tr><td>5</td><td>2025-07-20</td><td>Mission Award - Excellence</td><td>$1,500.00</td><td>Deposit</td></tr>
+  <tr><td>6</td><td>2025-07-05</td><td>ATM Withdrawal - Los Angeles</td><td>-$200.00</td><td>Withdraw</td></tr>
+  <tr><td>7</td><td>2025-06-28</td><td>Army Salary - June</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>8</td><td>2025-06-15</td><td>Appointment Payment</td><td>$1,200.00</td><td>Deposit</td></tr>
+  <tr><td>9</td><td>2025-05-30</td><td>Wire Transfer to Family</td><td>-$1,000.00</td><td>Wire</td></tr>
+  <tr><td>10</td><td>2025-05-12</td><td>Mission Bonus - Training Drill</td><td>$750.00</td><td>Deposit</td></tr>
+  <tr><td>11</td><td>2025-04-30</td><td>Army Salary - April</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>12</td><td>2025-04-18</td><td>Travel Allowance</td><td>$450.00</td><td>Deposit</td></tr>
+  <tr><td>13</td><td>2025-04-05</td><td>ATM Withdrawal - Washington</td><td>-$300.00</td><td>Withdraw</td></tr>
+  <tr><td>14</td><td>2025-03-29</td><td>Army Salary - March</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>15</td><td>2025-03-10</td><td>Mission Award - Leadership</td><td>$1,000.00</td><td>Deposit</td></tr>
+  <tr><td>16</td><td>2025-02-28</td><td>Army Salary - February</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>17</td><td>2025-02-20</td><td>Wire Transfer to Savings</td><td>-$2,000.00</td><td>Wire</td></tr>
+  <tr><td>18</td><td>2025-02-05</td><td>Medical Reimbursement</td><td>$280.00</td><td>Deposit</td></tr>
+  <tr><td>19</td><td>2025-01-31</td><td>Army Salary - January</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>20</td><td>2025-01-15</td><td>Mission Bonus - Winter Ops</td><td>$1,500.00</td><td>Deposit</td></tr>
+  <tr><td>21</td><td>2024-12-30</td><td>Army Salary - December</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>22</td><td>2024-12-22</td><td>Holiday Bonus</td><td>$1,200.00</td><td>Deposit</td></tr>
+  <tr><td>23</td><td>2024-12-05</td><td>ATM Withdrawal - New York</td><td>-$400.00</td><td>Withdraw</td></tr>
+  <tr><td>24</td><td>2024-11-30</td><td>Army Salary - November</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>25</td><td>2024-11-18</td><td>Appointment Payment</td><td>$1,100.00</td><td>Deposit</td></tr>
+  <tr><td>26</td><td>2024-10-31</td><td>Army Salary - October</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>27</td><td>2024-10-20</td><td>Mission Bonus - Field Exercise</td><td>$900.00</td><td>Deposit</td></tr>
+  <tr><td>28</td><td>2024-09-30</td><td>Army Salary - September</td><td>$4,800.00</td><td>Deposit</td></tr>
+  <tr><td>29</td><td>2024-09-12</td><td>Wire Transfer - Equipment Purchase</td><td>-$1,500.00</td><td>Wire</td></tr>
+  <tr><td>30</td><td>2024-08-30</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
+</tbody>
+
+      </table>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
-    &copy; <span id="year"></span> Financia Global Services. All rights reserved.
+    &copy; <span id="year"></span> Military Banking Dashboard. All rights reserved.
   </footer>
 
   <script>
-    // auto-update footer year
+    function toggleHistory() {
+      const box = document.getElementById("historyBox");
+      const arrow = document.getElementById("arrow");
+      if (box.style.display === "block") {
+        box.style.display = "none";
+        arrow.textContent = "▼";
+      } else {
+        box.style.display = "block";
+        arrow.textContent = "▲";
+      }
+    }
     document.getElementById("year").textContent = new Date().getFullYear();
+    function logout() {
+      alert("Logged out (demo).");
+    }
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ACH Transfer Form</title>
+  <title>Fund Transfer Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,6 +11,7 @@
       margin: 0;
       padding: 0;
     }
+
     .container {
       max-width: 600px;
       margin: 40px auto;
@@ -19,17 +20,20 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       border-radius: 10px;
     }
+
     h2 {
       text-align: center;
       color: #0077b6;
       margin-bottom: 30px;
     }
+
     label {
       display: block;
       margin-bottom: 6px;
       font-weight: bold;
       color: #333;
     }
+
     input, select, textarea {
       width: 100%;
       padding: 10px;
@@ -38,9 +42,11 @@
       border-radius: 6px;
       font-size: 16px;
     }
+
     textarea {
       resize: vertical;
     }
+
     button {
       background-color: #0077b6;
       color: white;
@@ -50,9 +56,11 @@
       font-size: 16px;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #023e8a;
     }
+
     .back-link {
       display: block;
       margin-top: 20px;
@@ -60,6 +68,7 @@
       color: #0077b6;
       text-decoration: none;
     }
+
     .back-link:hover {
       text-decoration: underline;
     }
@@ -67,8 +76,8 @@
 </head>
 <body>
   <div class="container">
-    <h2>ACH Transfer</h2>
-    <form action="ach-transfer-submit.php" method="post">
+    <h2>Transfer Funds</h2>
+    <form id="transferForm" autocomplete="off">
       <label for="sender">Sender Name</label>
       <input type="text" id="sender" name="sender" placeholder="e.g. Keanu Charles Reeves" required />
 
@@ -76,23 +85,46 @@
       <input type="text" id="recipient" name="recipient" placeholder="e.g. Emily Carter" required />
 
       <label for="bank">Recipient Bank Name</label>
-      <input type="text" id="bank" name="bank" placeholder="e.g. Chase Bank" required />
+      <input type="text" id="bank" name="bank" placeholder="e.g. Wells Fargo" required />
 
       <label for="account-number">Recipient Account Number</label>
-      <input type="text" id="account-number" name="account-number" placeholder="e.g. 9876543210" required />
+      <input type="text" id="account-number" name="account-number" placeholder="e.g. 1234567890" required />
 
       <label for="routing-number">Routing Number</label>
-      <input type="text" id="routing-number" name="routing-number" placeholder="e.g. 026009593" required />
+      <input type="text" id="routing-number" name="routing-number" placeholder="e.g. 101000187" required />
 
       <label for="amount">Amount (USD)</label>
-      <input type="number" id="amount" name="amount" placeholder="e.g. 2500" required />
+      <input type="number" id="amount" name="amount" placeholder="e.g. 15000" required />
 
       <label for="description">Description / Note (optional)</label>
       <textarea id="description" name="description" rows="3" placeholder="Optional note or description..."></textarea>
 
-      <button type="submit">Submit ACH Transfer</button>
+      <button type="submit">Submit Transfer</button>
     </form>
+
     <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
   </div>
+
+  <script>
+    document.getElementById("transferForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Save transfer details temporarily in sessionStorage
+      const transferData = {
+        sender: document.getElementById("sender").value,
+        recipient: document.getElementById("recipient").value,
+        bank: document.getElementById("bank").value,
+        accountNumber: document.getElementById("account-number").value,
+        routingNumber: document.getElementById("routing-number").value,
+        amount: document.getElementById("amount").value,
+        description: document.getElementById("description").value
+      };
+
+      sessionStorage.setItem("pendingTransfer", JSON.stringify(transferData));
+
+      // Redirect to pin.html for verification
+      window.location.href = "pin.html?next=transferSuccess";
+    });
+  </script>
 </body>
 </html>

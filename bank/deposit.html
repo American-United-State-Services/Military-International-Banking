@@ -68,7 +68,7 @@
 <body>
   <div class="container">
     <h2>Deposit Funds</h2>
-    <form action="deposit-form-submit.php" method="post">
+    <form id="depositForm" autocomplete="off">
       <label for="depositor">Depositor Name</label>
       <input type="text" id="depositor" name="depositor" placeholder="e.g. Keanu Charles Reeves" required />
 
@@ -91,5 +91,27 @@
     </form>
     <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
   </div>
+
+  <script>
+    document.getElementById("depositForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Collect form values
+      const depositData = {
+        depositor: document.getElementById("depositor").value,
+        accountHolder: document.getElementById("account-holder").value,
+        bank: document.getElementById("bank").value,
+        accountNumber: document.getElementById("account-number").value,
+        amount: document.getElementById("amount").value,
+        description: document.getElementById("description").value
+      };
+
+      // Save deposit data temporarily in sessionStorage
+      sessionStorage.setItem("pendingDeposit", JSON.stringify(depositData));
+
+      // Redirect to PIN page
+      window.location.href = "pin.html";
+    });
+  </script>
 </body>
 </html>

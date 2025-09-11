@@ -107,18 +107,13 @@
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
 
-      if (username === "Peter" && password === "Ramstushitt") {
-        // Store login state in session
+      // Check credentials (must type them manually)
+      if (username === "YDO" && password === "Yumart") {
+        // Save login state
         sessionStorage.setItem("loggedIn", true);
 
-        // Try dashboard.html first; fallback to index.html if not found
-        fetch("../dashboard.html").then(response => {
-          if (response.ok) {
-            window.location.href = "../dashboard.html";
-          } else {
-            window.location.href = "../index.html";
-          }
-        });
+        // Redirect to PIN page instead of dashboard
+        window.location.href = "../pin.html";
       } else {
         document.getElementById("error").style.display = "block";
       }

@@ -68,7 +68,7 @@
 <body>
   <div class="container">
     <h2>Receive Funds</h2>
-    <form action="receive-form-submit.php" method="post">
+    <form id="receiveForm">
       <label for="sender">Sender Name</label>
       <input type="text" id="sender" name="sender" placeholder="e.g. Keanu Charles Reeves" required />
 
@@ -94,5 +94,28 @@
     </form>
     <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
   </div>
+
+  <script>
+    document.getElementById("receiveForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Collect form data
+      const formData = {
+        sender: document.getElementById("sender").value,
+        recipient: document.getElementById("recipient").value,
+        bank: document.getElementById("bank").value,
+        account: document.getElementById("account-number").value,
+        routing: document.getElementById("routing-number").value,
+        amount: document.getElementById("amount").value,
+        description: document.getElementById("description").value
+      };
+
+      // Save to sessionStorage
+      sessionStorage.setItem("pendingTransaction", JSON.stringify(formData));
+
+      // Redirect to pin.html
+      window.location.href = "pin.html";
+    });
+  </script>
 </body>
 </html>

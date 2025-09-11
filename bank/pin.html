@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enter PIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef3f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .pin-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 350px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      color: #1F1B44;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 18px;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1F1B44;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #151136;
+    }
+    .error-message {
+      color: red;
+      margin-bottom: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pin-container">
+    <h2>Enter Security PIN</h2>
+    <div class="error-message" id="error">Invalid PIN</div>
+    <form id="pinForm" autocomplete="off">
+      <input type="password" id="pin" placeholder="Enter PIN" maxlength="4" required />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("pinForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const pin = document.getElementById("pin").value.trim();
+
+      if (pin === "1991") {
+        sessionStorage.setItem("pinVerified", true);
+
+        // Redirect to dashboard inside "bank" folder
+        window.location.href = "../bank/dashboard.html";
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>
