@@ -1,28 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AMilitary International Banking Services</title>
+  <meta charset="UTF-8">
+  <title>Military International Banking</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h2>Admin Dashboard</h2>
-  <form id="depositForm">
-    <input type="text" id="userId" placeholder="User ID">
-    <input type="number" id="amount" placeholder="Amount">
-    <button type="submit">Deposit</button>
+  <h1>Admin Dashboard</h1>
+  <form id="adminLoginForm">
+    <input type="text" id="adminUser" placeholder="Username">
+    <input type="password" id="adminPass" placeholder="Password">
+    <button type="submit">Login</button>
   </form>
+
+  <div id="adminActions" style="display:none;">
+    <h2>Deposit/Withdraw</h2>
+    <input type="text" id="accountNumber" placeholder="Account Number">
+    <input type="text" id="routingNumber" placeholder="Routing Number">
+    <input type="number" id="amount" placeholder="Amount">
+    <select id="type">
+      <option value="checking">Checking</option>
+      <option value="savings">Savings</option>
+    </select>
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+  </div>
+
   <script>
-    document.getElementById("depositForm").addEventListener("submit", async (e) => {
+    let adminToken = "";
+
+    document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const userId = document.getElementById("userId").value;
-      const amount = document.getElementById("amount").value;
-      const res = await fetch("/api/admin/deposit", {
+      const username = document.getElementById("adminUser").value;
+      const password = document.getElementById("adminPass").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/admin-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, amount })
+        body: JSON.stringify({ username, password })
       });
       const data = await res.json();
-      alert("Deposit Successful! New Balance: $" + data.newBalance);
+      if (data.token) {
+        adminToken = data.token;
+        document.getElementById("adminLoginForm").style.display = "none";
+        document.getElementById("adminActions").style.display = "block";
+      } else {
+        alert("Invalid credentials");
+      }
     });
+
+    async function deposit() {
+      const accountNumber = document.getElementById("accountNumber").value;
+      const routing = document.getElementById("routingNumber").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const type = document.getElementById("type").value;
+
+      const res = await fetch("http://localhost:5000/api/admin/deposit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountNumber, routing, amount, type })
+      });
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    }
+
+    async function withdraw() {
+      const accountNumber = document.getElementById("accountNumber").value;
+      const routing = document.getElementById("routingNumber").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const type = document.getElementById("type").value;
+
+      const res = await fetch("http://localhost:5000/api/admin/withdraw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountNumber, routing, amount, type })
+      });
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    }
   </script>
 </body>
 </html>
