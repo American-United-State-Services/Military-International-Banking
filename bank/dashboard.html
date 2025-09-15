@@ -1,79 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Financia Global Services Dashboard (Demo)</title>
+  <title>Military International Banking Dashboard</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-    body { background: #f7f9fb; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    body {
+      background: #f4f6f9;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
     /* Top navigation bar */
     .top-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      background: #003366; color: white; padding: 12px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg,#003366,#0055a4);
+      color: white;
+      padding: 16px 25px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .top-bar .left { display: flex; align-items: center; gap: 12px; }
-    .top-bar .flag { width: 28px; height: 18px; border: 1px solid #ccc; }
+    .top-bar .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .flag {
+      width: 28px;
+      height: 18px;
+      border: 1px solid #ccc;
+    }
     .top-bar select {
-      padding: 6px; border: none; border-radius: 4px;
-      font-size: 14px; outline: none;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
     }
     .top-bar .right a {
-      color: white; margin-left: 20px; text-decoration: none;
-      font-weight: 500; transition: color 0.2s;
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity .2s;
     }
-    .top-bar .right a:hover { color: #ffd700; }
+    .top-bar .right a:hover {
+      opacity: .8;
+    }
 
     /* Profile */
     .profile-header {
-      display: flex; align-items: center; gap: 15px;
-      padding: 20px; background: white; margin: 20px;
-      border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      background: white;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      max-width: 1000px;
+      width: calc(100% - 40px);
     }
     .profile-header img {
-      width: 70px; height: 70px; border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
       border: 2px solid #eee;
     }
 
-    /* Account Cards */
-    .balance-card {
-      background: white; color: #003366; padding: 25px;
-      display: flex; justify-content: space-between; flex-wrap: wrap;
-      border-radius: 10px; margin: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    /* Account Cards container */
+    .accounts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+      gap: 20px;
+      max-width: 1000px;
+      width: calc(100% - 40px);
+      margin: 0 auto;
     }
-    .balance-card h1 { font-size: 2em; margin: 10px 0; color: #1a4d3a; }
-    .balance-info p { margin: 5px 0; }
-    .account-number { text-align: right; font-size: 14px; }
+
+    .balance-card {
+      background: white;
+      color: #003366;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .balance-card h1 {
+      font-size: 2em;
+      margin: 10px 0;
+      color: #1a4d3a;
+    }
+    .balance-info p {
+      margin: 5px 0;
+    }
+    .account-number {
+      font-size: 14px;
+      margin-top: 10px;
+    }
 
     /* Buttons */
     .action-buttons {
-      text-align: center; margin: 30px 0;
-      display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
     }
     .action-buttons a {
-      background: #003366; color: white; padding: 12px 28px;
-      text-decoration: none; border-radius: 6px;
-      font-weight: 600; font-size: 14px;
-      transition: background 0.3s;
+      background: #003366;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background .3s;
     }
-    .action-buttons a:hover { background: #0055a4; }
+    .action-buttons a:hover {
+      background: #0055a4;
+    }
+
+   .crypto-box {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.view-card-box {
+  background-color: #34495e;
+  color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.view-card-box:hover {
+  background-color: #2c3e50;
+}
+
+.card-container {
+  position: relative;
+  width: 300px; /* adjust to your image width */
+  height: 190px; /* adjust to your image height */
+  margin: 0 auto 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.atm-card {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  border-radius: 8px;
+}
+
+
+    .apply-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #075f1c;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background .3s;
+    }
+    .apply-btn:hover {
+      background-color: #001a4d;
+    }
 
     /* Collapsible Box */
     .transactions-box {
       width: calc(100% - 40px);
       margin: 0 auto 30px;
       background: white;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       overflow: hidden;
+      max-width: 1000px;
     }
     .transactions-header {
       background: #003366;
       color: white;
-      padding: 15px;
+      padding: 15px 20px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -83,21 +207,38 @@
     .transactions-content {
       display: none;
       padding: 20px;
+      animation: fadeIn .3s ease;
     }
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+
     table {
-      width: 100%; border-collapse: collapse; margin-top: 10px;
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
     }
-    thead { background: #003366; color: white; }
+    thead {
+      background: #003366;
+      color: white;
+    }
     th, td {
-      padding: 12px; text-align: center; font-size: 14px;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
       border-bottom: 1px solid #eee;
     }
-    tbody tr:nth-child(even) { background: #f9f9f9; }
-    tbody tr:hover { background: #eef5ff; }
+    tbody tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    tbody tr:hover {
+      background: #eef5ff;
+    }
 
     /* Footer */
     footer {
-      background: #003366;
+      background: linear-gradient(90deg,#003366,#0055a4);
       color: white;
       text-align: center;
       padding: 15px 10px;
@@ -130,31 +271,34 @@
     </div>
   </section>
 
-  <!-- Checking Account -->
-  <section class="balance-card">
-    <div class="balance-info">
-      <p>Checking Account Balance</p>
-      <h1>$585,420.75 USD</h1>
-      <p>Account Name<br><strong>YDO Yumart</strong></p>
-    </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>5643008970</strong><br/>
-      <p>Routing Number</p><strong>111000025</strong>
-    </div>
-  </section>
+  <!-- Accounts Grid -->
+  <div class="accounts">
+    <!-- Checking Account -->
+    <section class="balance-card">
+      <div class="balance-info">
+        <p>Checking Account Balance</p>
+        <h1>$585,420.75 USD</h1>
+        <p>Account Name<br><strong>YDO Yumart</strong></p>
+      </div>
+      <div class="account-number">
+        <p>Account Number</p><strong>5643008970</strong><br/>
+        <p>Routing Number</p><strong>111000025</strong>
+      </div>
+    </section>
 
-  <!-- Saving Account -->
-  <section class="balance-card">
-    <div class="balance-info">
-      <p>Savings Account Balance</p>
-      <h1>$952,390.40 USD</h1>
-      <p>Account Name<br><strong>YDO Yumart</strong></p>
-    </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>9876543210</strong><br/>
-      <p>Routing Number</p><strong>111000025</strong>
-    </div>
-  </section>
+    <!-- Saving Account -->
+    <section class="balance-card">
+      <div class="balance-info">
+        <p>Savings Account Balance</p>
+        <h1>$952,390.40 USD</h1>
+        <p>Account Name<br><strong>YDO Yumart</strong></p>
+      </div>
+      <div class="account-number">
+        <p>Account Number</p><strong>9876543210</strong><br/>
+        <p>Routing Number</p><strong>111000025</strong>
+      </div>
+    </section>
+  </div>
 
   <!-- Action Buttons -->
   <div class="action-buttons">
@@ -165,57 +309,106 @@
     <a href="ach.html">ACH</a>
   </div>
 
+ <!-- Card Order -->
+<div class="crypto-box">
+  <h2 class="transactions-title">Order Your Debit/Credit Card</h2>
+
+  <!-- View bank card box -->
+  <div class="view-card-box" id="viewCardBox">
+    View Bank Card
+  </div>
+
+  <!-- Hidden card container -->
+  <div class="card-container" id="cardContainer" style="display:none;">
+    <img src="auth/front.jpg" alt="ATM Card Front" class="atm-card" id="cardImage"/>
+  </div>
+
+ 
+
+  <a href="ship.html" class="apply-btn">Apply For MasterCard</a>
+</div>
+
   <!-- Transactions History -->
   <div class="transactions-box">
     <div class="transactions-header" onclick="toggleHistory()">
       View Transactions History <span id="arrow">▼</span>
     </div>
     <div class="transactions-content" id="historyBox">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Amount (USD)</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-        <tbody>
-  <tr><td>1</td><td>2025-09-01</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>2</td><td>2025-08-25</td><td>Mission Bonus - Operation Shield</td><td>$2,000.00</td><td>Deposit</td></tr>
-  <tr><td>3</td><td>2025-08-10</td><td>Uniform Allowance</td><td>$500.00</td><td>Deposit</td></tr>
-  <tr><td>4</td><td>2025-07-30</td><td>Medical Reimbursement</td><td>$320.00</td><td>Deposit</td></tr>
-  <tr><td>5</td><td>2025-07-20</td><td>Mission Award - Excellence</td><td>$1,500.00</td><td>Deposit</td></tr>
-  <tr><td>6</td><td>2025-07-05</td><td>ATM Withdrawal - Los Angeles</td><td>-$200.00</td><td>Withdraw</td></tr>
-  <tr><td>7</td><td>2025-06-28</td><td>Army Salary - June</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>8</td><td>2025-06-15</td><td>Appointment Payment</td><td>$1,200.00</td><td>Deposit</td></tr>
-  <tr><td>9</td><td>2025-05-30</td><td>Wire Transfer to Family</td><td>-$1,000.00</td><td>Wire</td></tr>
-  <tr><td>10</td><td>2025-05-12</td><td>Mission Bonus - Training Drill</td><td>$750.00</td><td>Deposit</td></tr>
-  <tr><td>11</td><td>2025-04-30</td><td>Army Salary - April</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>12</td><td>2025-04-18</td><td>Travel Allowance</td><td>$450.00</td><td>Deposit</td></tr>
-  <tr><td>13</td><td>2025-04-05</td><td>ATM Withdrawal - Washington</td><td>-$300.00</td><td>Withdraw</td></tr>
-  <tr><td>14</td><td>2025-03-29</td><td>Army Salary - March</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>15</td><td>2025-03-10</td><td>Mission Award - Leadership</td><td>$1,000.00</td><td>Deposit</td></tr>
-  <tr><td>16</td><td>2025-02-28</td><td>Army Salary - February</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>17</td><td>2025-02-20</td><td>Wire Transfer to Savings</td><td>-$2,000.00</td><td>Wire</td></tr>
-  <tr><td>18</td><td>2025-02-05</td><td>Medical Reimbursement</td><td>$280.00</td><td>Deposit</td></tr>
-  <tr><td>19</td><td>2025-01-31</td><td>Army Salary - January</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>20</td><td>2025-01-15</td><td>Mission Bonus - Winter Ops</td><td>$1,500.00</td><td>Deposit</td></tr>
-  <tr><td>21</td><td>2024-12-30</td><td>Army Salary - December</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>22</td><td>2024-12-22</td><td>Holiday Bonus</td><td>$1,200.00</td><td>Deposit</td></tr>
-  <tr><td>23</td><td>2024-12-05</td><td>ATM Withdrawal - New York</td><td>-$400.00</td><td>Withdraw</td></tr>
-  <tr><td>24</td><td>2024-11-30</td><td>Army Salary - November</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>25</td><td>2024-11-18</td><td>Appointment Payment</td><td>$1,100.00</td><td>Deposit</td></tr>
-  <tr><td>26</td><td>2024-10-31</td><td>Army Salary - October</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>27</td><td>2024-10-20</td><td>Mission Bonus - Field Exercise</td><td>$900.00</td><td>Deposit</td></tr>
-  <tr><td>28</td><td>2024-09-30</td><td>Army Salary - September</td><td>$4,800.00</td><td>Deposit</td></tr>
-  <tr><td>29</td><td>2024-09-12</td><td>Wire Transfer - Equipment Purchase</td><td>-$1,500.00</td><td>Wire</td></tr>
-  <tr><td>30</td><td>2024-08-30</td><td>Army Salary - August</td><td>$4,800.00</td><td>Deposit</td></tr>
-</tbody>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>2024-06-26</td><td>Medal of Honor Bonus</td><td>-$34,877.00</td><td>Wire</td></tr>
+<tr><td>2</td><td>2024-10-05</td><td>Mission Bonus - Eagle Watch</td><td>-$31,886.00</td><td>Transfer</td></tr>
+<tr><td>3</td><td>2025-04-17</td><td>Promotion to Captain</td><td>-$9,522.00</td><td>Transfer</td></tr>
+<tr><td>4</td><td>2024-12-16</td><td>Medal of Honor Bonus</td><td>-$22,958.00</td><td>Wire</td></tr>
+<tr><td>5</td><td>2024-11-06</td><td>Holiday Bonus</td><td>-$25,055.00</td><td>Transfer</td></tr>
+<tr><td>6</td><td>2025-06-16</td><td>Wire Transfer to Family</td><td>-$32,138.00</td><td>Withdraw</td></tr>
+<tr><td>7</td><td>2025-05-02</td><td>Promotion to Captain</td><td>-$39,105.00</td><td>Transfer</td></tr>
+<tr><td>8</td><td>2024-07-22</td><td>Wire Transfer to Family</td><td>-$30,013.00</td><td>Transfer</td></tr>
+<tr><td>9</td><td>2024-09-15</td><td>Medal of Honor Bonus</td><td>-$9,630.00</td><td>Wire</td></tr>
+<tr><td>10</td><td>2024-05-27</td><td>Holiday Bonus</td><td>-$15,591.00</td><td>Wire</td></tr>
+<tr><td>11</td><td>2025-03-06</td><td>Wire Transfer to Family</td><td>-$44,523.00</td><td>Transfer</td></tr>
+<tr><td>12</td><td>2024-11-02</td><td>Promotion to Captain</td><td>$14,898.00</td><td>Deposit</td></tr>
+<tr><td>13</td><td>2024-05-11</td><td>Promotion to Captain</td><td>-$25,065.00</td><td>Transfer</td></tr>
+<tr><td>14</td><td>2024-03-01</td><td>Operation Desert Storm</td><td>-$6,666.00</td><td>Transfer</td></tr>
+<tr><td>15</td><td>2025-05-09</td><td>Army Salary</td><td>-$6,988.00</td><td>Withdraw</td></tr>
+<tr><td>16</td><td>2025-04-08</td><td>Mission Award - Courage</td><td>-$19,517.00</td><td>Wire</td></tr>
+<tr><td>17</td><td>2025-05-08</td><td>Holiday Bonus</td><td>$25,843.00</td><td>Deposit</td></tr>
+<tr><td>18</td><td>2025-01-27</td><td>Mission Award - Courage</td><td>$38,251.00</td><td>Deposit</td></tr>
+<tr><td>19</td><td>2024-02-24</td><td>Promotion to Captain</td><td>-$43,439.00</td><td>Transfer</td></tr>
+<tr><td>20</td><td>2024-10-16</td><td>Medal of Honor Bonus</td><td>-$43,858.00</td><td>Withdraw</td></tr>
+<tr><td>21</td><td>2024-10-18</td><td>Mission Award - Leadership</td><td>-$32,858.00</td><td>Wire</td></tr>
+<tr><td>22</td><td>2024-04-29</td><td>Medical Reimbursement</td><td>-$33,436.00</td><td>Transfer</td></tr>
+<tr><td>23</td><td>2025-06-09</td><td>Mission Bonus - Training Drill</td><td>$12,056.00</td><td>Deposit</td></tr>
+<tr><td>24</td><td>2025-02-09</td><td>Army Salary</td><td>-$26,088.00</td><td>Withdraw</td></tr>
+<tr><td>25</td><td>2024-08-25</td><td>Mission Award - Excellence</td><td>$14,528.00</td><td>Deposit</td></tr>
+<tr><td>26</td><td>2025-07-04</td><td>Medal of Honor Bonus</td><td>$43,892.00</td><td>Deposit</td></tr>
+<tr><td>27</td><td>2025-08-22</td><td>Wire Transfer to Savings</td><td>-$20,588.00</td><td>Wire</td></tr>
+<tr><td>28</td><td>2024-01-25</td><td>Medal of Honor Bonus</td><td>-$8,611.00</td><td>Withdraw</td></tr>
+<tr><td>29</td><td>2024-06-29</td><td>Wire Transfer to Savings</td><td>$11,537.00</td><td>Deposit</td></tr>
+<tr><td>30</td><td>2024-09-25</td><td>Mission Award - Excellence</td><td>-$6,012.00</td><td>Withdraw</td></tr>
+<tr><td>31</td><td>2024-02-02</td><td>Travel Allowance</td><td>-$12,985.00</td><td>Wire</td></tr>
+<tr><td>32</td><td>2024-11-01</td><td>Promotion to Captain</td><td>-$22,062.00</td><td>Wire</td></tr>
+<tr><td>33</td><td>2025-05-15</td><td>Medical Reimbursement</td><td>$10,288.00</td><td>Deposit</td></tr>
+<tr><td>34</td><td>2024-09-04</td><td>Army Salary</td><td>-$16,558.00</td><td>Withdraw</td></tr>
+<tr><td>35</td><td>2025-06-10</td><td>Mission Award - Courage</td><td>-$9,306.00</td><td>Wire</td></tr>
+<tr><td>36</td><td>2025-01-18</td><td>Deployment Payment</td><td>$41,181.00</td><td>Deposit</td></tr>
+<tr><td>37</td><td>2025-05-12</td><td>Promotion to Captain</td><td>-$30,081.00</td><td>Wire</td></tr>
+<tr><td>38</td><td>2025-03-13</td><td>Mission Award - Leadership</td><td>-$26,184.00</td><td>Wire</td></tr>
+<tr><td>39</td><td>2024-05-06</td><td>Mission Award - Excellence</td><td>-$44,973.00</td><td>Transfer</td></tr>
+<tr><td>40</td><td>2025-07-31</td><td>Deployment Payment</td><td>-$42,603.00</td><td>Withdraw</td></tr>
+<tr><td>41</td><td>2024-11-21</td><td>Mission Bonus - Eagle Watch</td><td>-$11,787.00</td><td>Wire</td></tr>
+<tr><td>42</td><td>2025-04-07</td><td>Deployment Payment</td><td>$25,469.00</td><td>Deposit</td></tr>
+<tr><td>43</td><td>2024-07-12</td><td>Appointment Payment</td><td>-$37,320.00</td><td>Transfer</td></tr>
+<tr><td>44</td><td>2024-01-16</td><td>Mission Bonus - Eagle Watch</td><td>$27,380.00</td><td>Deposit</td></tr>
+<tr><td>45</td><td>2025-05-19</td><td>Army Salary</td><td>-$41,355.00</td><td>Withdraw</td></tr>
+<tr><td>46</td><td>2024-08-31</td><td>Travel Allowance</td><td>-$16,931.00</td><td>Withdraw</td></tr>
+<tr><td>47</td><td>2025-02-15</td><td>Promotion to Captain</td><td>-$16,313.00</td><td>Withdraw</td></tr>
+<tr><td>48</td><td>2024-10-18</td><td>Army Salary</td><td>-$4,058.00</td><td>Transfer</td></tr>
+<tr><td>49</td><td>2024-04-12</td><td>Travel Allowance</td><td>-$39,262.00</td><td>Transfer</td></tr>
+<tr><td>50</td><td>2025-05-28</td><td>Army Salary</td><td>-$5,361.00</td><td>Wire</td></tr>
+<tr><td>51</td><td>2025-03-14</td><td>Operation Desert Storm</td><td>$23,874.00</td><td>Deposit</td></tr>
+<tr><td>52</td><td>2025-05-25</td><td>Mission Award - Excellence</td><td>-$10,084.00</td><td>Transfer</td></tr>
+<tr><td>53</td><td>2024-11-20</td><td>Uniform Allowance</td><td>$18,253.00</td><td>Deposit</td></tr>
+<tr><td>54</td><td>2025-08-19</td><td>Mission Bonus - Eagle Watch</td><td>-$41,377.00</td><td>Transfer</td></tr>
+<tr><td>55</td><td>2024-08-12</td><td>Holiday Bonus</td><td>-$29,502.00</td><td>Transfer</td></tr>
+<tr><td>56</td><td>2024-07-29</td><td>Field Exercise Bonus</td><td>-$11,140.00</td><td>Transfer</td></tr>
+<tr><td>57</td><td>2024-05-11</td><td>Mission Award - Excellence</td><td>-$11,850.00</td><td>Wire</td></tr>
+<tr><td>58</td><td>2025-06-18</td><td>Promotion to Captain</td><td>-$14,055.00</td><td>Wire</td></tr>
+<tr><td>59</td><td>2024-06-06</td><td>Uniform Allowance</td><td>$41,445.00</td><td>Deposit</td></tr>
+<tr><td>60</td><td>2024-03-07</td><td>Mission Award - Courage</td><td>$35,172.00</td><td>Deposit</td></tr>
+    </tbody>
+  </table>
+</div>
 
-      </table>
-    </div>
   </div>
 
   <!-- Footer -->
@@ -239,6 +432,34 @@
     function logout() {
       alert("Logged out (demo).");
     }
+
+    
+// When clicking "View Bank Card" show the card container
+const viewBox = document.getElementById('viewCardBox');
+const cardContainer = document.getElementById('cardContainer');
+const cardImage = document.getElementById('cardImage');
+
+let showingFront = true;
+
+viewBox.addEventListener('click', () => {
+  // Toggle visibility of card container
+  if (cardContainer.style.display === 'none') {
+    cardContainer.style.display = 'block';
+  } else {
+    cardContainer.style.display = 'none';
+  }
+});
+
+// Toggle between front and back images on card click
+cardImage.addEventListener('click', () => {
+  if (showingFront) {
+    cardImage.src = 'auth/back.jpg';
+    showingFront = false;
+  } else {
+    cardImage.src = 'auth/front.jpg';
+    showingFront = true;
+  }
+});
   </script>
 </body>
 </html>
